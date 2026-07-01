@@ -197,36 +197,6 @@ export default function Dashboard() {
           </Card>
         ))}
       </div>
-
-      {/* QUICK ACTIONS */}
-      <Card>
-        <h2 className="text-lg font-semibold">Quick Actions</h2>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-
-          <button className="h-20 rounded-xl border border-border hover:bg-primary-light transition">
-            + Customer
-          </button>
-
-          <button className="h-20 rounded-xl border border-border hover:bg-primary-light transition">
-            + Invoice
-          </button>
-
-          <button className="h-20 rounded-xl border border-border hover:bg-primary-light transition">
-            Simulate Payment
-          </button>
-
-          <button
-            onClick={() => seedMutation.mutate()}
-            disabled={seedMutation.isPending}
-            className="h-20 rounded-xl border border-border hover:bg-primary-light transition disabled:opacity-50"
-          >
-            {seedMutation.isPending ? "Seeding..." : "Seed Demo Data"}
-          </button>
-
-        </div>
-      </Card>
-
       {/* TABLE */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 

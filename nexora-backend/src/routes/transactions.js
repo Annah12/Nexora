@@ -9,7 +9,7 @@ const router = express.Router();
 
 // GET /api/transactions
 // Returns all inbound transactions with linked virtual account info
-router.get('/', async (req, res) => {
+router.get('/transactions', async (req, res) => {
   try {
     const transactions = await prisma.transaction.findMany({
       include: {

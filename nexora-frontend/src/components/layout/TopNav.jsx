@@ -9,6 +9,7 @@ import { api } from '../../lib/api';
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/customers", label: "Customers" },
+  { to: "/accounts", label: "Accounts" },
   { to: "/unmatched", label: "Reconciliation" },
   { to: "/invoices", label: "Invoices" },
   { to: "/transactions", label: "Transactions" },

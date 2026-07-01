@@ -45,7 +45,7 @@ export default function Accounts() {
 
         <button
           onClick={() => setIsCreating(true)}
-          className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2.5 rounded-lg transition-colors text-xs font-bold uppercase tracking-wider shadow-sm"
+          className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2.5 rounded-lg transition-colors text-xs font-bold uppercase tracking-wider shadow-sm cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           Create Account
@@ -94,7 +94,7 @@ export default function Accounts() {
               <button
                 type="button"
                 onClick={() => setIsCreating(false)}
-                className="px-5 py-2.5 border border-border text-muted hover:text-text hover:border-border/80 rounded-lg transition-colors text-xs font-bold uppercase tracking-wider"
+                className="px-5 py-2.5 border border-border text-muted hover:text-text hover:border-border/80 rounded-lg transition-colors text-xs font-bold uppercase tracking-wider cursor-pointer"
               >
                 Cancel
               </button>
@@ -102,7 +102,7 @@ export default function Accounts() {
               <button
                 type="submit"
                 disabled={createMutation.isPending}
-                className="px-5 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-hover transition-colors disabled:opacity-50 text-xs uppercase tracking-wider shadow-sm"
+                className="px-5 py-2.5 bg-primary text-white rounded-lg font-bold hover:bg-primary-hover transition-colors disabled:opacity-50 text-xs uppercase tracking-wider shadow-sm cursor-pointer"
               >
                 {createMutation.isPending ? 'Creating...' : 'Create'}
               </button>
@@ -168,7 +168,7 @@ export default function Accounts() {
 
                       <button
                         onClick={() => handleCopy(account.accountNumber, account.id)}
-                        className="text-muted hover:text-text transition-colors p-1"
+                        className="text-muted hover:text-text transition-colors p-1 cursor-pointer"
                       >
                         {copiedId === account.id ? (
                           <CheckCircle2 className="w-5 h-5 text-text" />
