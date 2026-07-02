@@ -318,12 +318,12 @@ Nexora integrates with 15 distinct Nomba API endpoints across 6 product areas:
 | Scenario | What Happens |
 |---|---|
 | Customer already has an ACTIVE account | HTTP 409 with existing account ID; UI shows a toast |
-| Account name under 8 characters | HTTP 400 — Nomba minimum enforced before the API call is made |
+| Account name under 8 characters | HTTP 400: Nomba minimum enforced before the API call is made |
 | Closing account with non-zero balance | HTTP 409 unless `?force=true`; frontend shows balance amount and a consent checkbox; Close button stays disabled until ticked |
-| Attempting to reactivate a CLOSED account | HTTP 409 — closure is permanent; UI removes all actions from closed cards |
+| Attempting to reactivate a CLOSED account | HTTP 409: closure is permanent; UI removes all actions from closed cards |
 | Renaming a closed account | Not permitted; kebab menu collapses to "Account is closed" |
 | Payment on a FROZEN account | Bank rails do not enforce freezes. Engine catches it, creates MISDIRECTED exception. |
-| Payment on a CLOSED account | Same — rails are unaware. Caught by engine, routed to catch-all, flagged MISDIRECTED. |
+| Payment on a CLOSED account | Same: rails are unaware. Caught by engine, routed to catch-all, flagged MISDIRECTED. |
 | Unknown accountRef in webhook | Catch-all holding account + MISDIRECTED exception with full sender details. |
 
 ### Reconciliation
@@ -335,15 +335,15 @@ Nexora integrates with 15 distinct Nomba API endpoints across 6 product areas:
 | Overpayment within 2% | Treated as rounding; Invoice → PAID; no exception raised |
 | Significant overpayment (>2%) | Invoice → PAID; Transaction → MATCHED; OVERPAYMENT exception raised for review |
 | No open invoice for customer | Transaction → UNMATCHED; Exception created with full sender details |
-| Duplicate Nomba webhook | `nombaRequestId` unique index — processing skipped; no DB write |
-| Multiple payments same customer | FIFO — oldest invoice matched first; balance reduces across payments |
+| Duplicate Nomba webhook | `nombaRequestId` unique index: processing skipped; no DB write |
+| Multiple payments same customer | FIFO: oldest invoice matched first; balance reduces across payments |
 | DB write fails mid-reconciliation | Prisma `$transaction` rollback, all four tables stay consistent |
 
 ### KYC Tier Changes
 
 | Scenario | What Happens |
 |---|---|
-| Customer created without BVN | kycTier = 1; amber "Tier 1 — Upgrade" badge |
+| Customer created without BVN | kycTier = 1; amber "Tier 1: Upgrade" badge |
 | Customer created with BVN | kycTier = 2; emerald "Tier 2" badge with shield icon |
 | BVN added to existing Tier 1 customer | PATCH call; kycTier bumps to 2 immediately; badge updates; cannot downgrade |
 | Tier 1 badge clicked in UI | BVN upgrade modal opens; 11-digit client-side validation; button disabled until valid |
@@ -368,14 +368,14 @@ Nexora integrates with 15 distinct Nomba API endpoints across 6 product areas:
 - A Nomba sandbox account — [dashboard.nomba.com](https://dashboard.nomba.com)
 - Two terminal windows
 
-### Step 1 — Clone the Repository
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/nexora.git
 cd nexora
 ```
 
-### Step 2 — Backend Setup
+### Step 2: Backend Setup
 
 ```bash
 cd nexora-backend
@@ -414,7 +414,7 @@ Expected output:
    Environment: development
 ```
 
-### Step 3 — Frontend Setup
+### Step 3: Frontend Setup
 
 Open a second terminal:
 
@@ -432,7 +432,7 @@ Expected output:
   ➜  Local:   http://localhost:5173/
 ```
 
-### Step 4 — Seed Demo Data
+### Step 4: Seed Demo Data
 
 Visit [http://localhost:5173](http://localhost:5173), go to the Dashboard, and click **Seed Demo Data**.
 
@@ -445,7 +445,7 @@ curl -X POST http://localhost:3000/api/seed
 
 The seeder is fully idempotent. Running it multiple times creates no duplicates.
 
-### Step 5 — Verify Everything Works
+### Step 5: Verify Everything Works
 
 ```bash
 # Health check
@@ -464,7 +464,7 @@ curl http://localhost:3000/api/exceptions
 curl http://localhost:3000/api/reconciliation/report
 ```
 
-### Step 6 — Optional: Live Nomba Webhooks
+### Step 6: Optional: Live Nomba Webhooks
 
 To receive real Nomba webhook events instead of using the simulation tool:
 
@@ -514,14 +514,14 @@ Click **Seed Demo Data** on the Dashboard. This creates:
 | T6a | Chidi Eze | ₦40,000 | ₦40,000 | ✅ MATCHED |
 | T6b | Unknown Sender | ₦15,000 | No open invoice | 🔴 UNMATCHED exception |
 
-### 2. KYC Upgrade — Customers Page
+### 2. KYC Upgrade: Customers Page
 Visit `/customers`.
 - Adaeze and Fatima show **Tier 2** emerald badges
 - Emeka and Chidi show amber **Tier 1 — Upgrade** badges
 - Click Emeka's badge → enter any 11-digit BVN → **Upgrade to Tier 2**
 - Badge flips to emerald immediately
 
-### 3. Account Lifecycle — Accounts Page
+### 3. Account Lifecycle: Accounts Page
 Visit `/accounts`. On any card, open the **⋮ kebab menu**:
 - **Rename** → type new name → Save. Card updates instantly.
 - **Freeze** → accent bar turns blue; notice explains frozen payments raise exceptions
@@ -537,7 +537,7 @@ Visit `/invoices`:
 
 Create a new invoice for any customer, then go to Transactions to pay it.
 
-### 5. Simulate a Payment — Transactions Page
+### 5. Simulate a Payment: Transactions Page
 Visit `/transactions` → **Simulate Webhook** → choose an account → enter an amount → **Dispatch**.
 
 Try these to see different outcomes:
@@ -545,7 +545,7 @@ Try these to see different outcomes:
 - Half the invoice amount → PARTIAL
 - More than 102% of the amount → MATCHED + OVERPAYMENT exception in Reconciliation
 
-### 6. Exceptions & Reconciliation — Reconciliation Page
+### 6. Exceptions & Reconciliation: Reconciliation Page
 Visit `/unmatched` → **Exceptions** tab:
 - Fatima's ₦50,000 overpayment (OVERPAYMENT)
 - Unknown sender's ₦15,000 (UNMATCHED)
@@ -554,9 +554,9 @@ Visit `/unmatched` → **Exceptions** tab:
 
 Switch to the **Report** tab: live collection efficiency %, total volume, matched value, exception value.
 
-### 7. Account Statement — Statements Page
+### 7. Account Statement: Statements Page
 Visit `/statements` → select Fatima's account.
-Three credit entries visible: ₦18,000, ₦6,000, ₦50,000 — with running balance after each.
+Three credit entries visible: ₦18,000, ₦6,000, ₦50,000, with running balance after each.
 
 ### 8. Merchant Hub
 Visit `/merchant`:
@@ -674,34 +674,34 @@ All routes require `Authorization: Bearer <apiKey>`.
 
 ---
 
-## Judging Criteria — How We Address Each One
+## Judging Criteria: How We Address Each One
 
 ### A Real Nigerian Business Problem (20%)
 
 This is not a hypothetical use case built to fit a hackathon brief. It is the daily operating reality of tens of millions of Nigerian business owners. Our mother is one of them. The inability to automatically match incoming bank transfers to specific customers causes real financial loss, customer disputes, and hours of manual labour every single day across Nigerian commerce.
 
-Nomba described the structural problem precisely: *"The moment you cannot tell what your business actually earned last month, you are flying blind."* Nexora gives business owners the visibility that transforms a side hustle into a structured business — the missing layer between Nomba's world-class infrastructure and the operational clarity that Nigerian MSMEs desperately need.
+Nomba described the structural problem precisely: *"The moment you cannot tell what your business actually earned last month, you are flying blind."* Nexora gives business owners the visibility that transforms a side hustle into a structured business, the missing layer between Nomba's world-class infrastructure and the operational clarity that Nigerian MSMEs desperately need.
 
 ### Strong Technical Implementation (25%)
 
 - Reconciliation engine handles **five distinct payment scenarios** with correct, distinct outcomes for each
 - **FIFO invoice matching** ensures payments are applied to the oldest outstanding invoice, preventing misallocation
-- **Atomic Prisma `$transaction`** on every reconciliation event — ledger, invoice, and transaction record always agree, even if the server crashes mid-write
-- **Catch-all holding account** — no funds are ever silently discarded; every naira is accounted for
+- **Atomic Prisma `$transaction`** on every reconciliation event: ledger, invoice, and transaction record always agree, even if the server crashes mid-write
+- **Catch-all holding account**: no funds are ever silently discarded; every naira is accounted for
 - **2% overpayment tolerance** reflects how Nigerian bank rails actually work and prevents false exceptions from rounding
-- **Full audit trail** — raw webhook payloads stored before processing; every state change traceable
-- **Token caching** — Nomba OAuth2 tokens cached in memory, refreshed at 55-minute mark, never wasted per-call
+- **Full audit trail**: raw webhook payloads stored before processing; every state change traceable
+- **Token caching**: Nomba OAuth2 tokens cached in memory, refreshed at 55-minute mark, never wasted per-call
 - **1,800+ lines of backend logic** across 9 route files and a dedicated reconciliation service
 
 ### Security and Reliability Built In From Day One (20%)
 
 - HMAC-SHA256 webhook verification using `crypto.timingSafeEqual` (timing-attack resistant)
 - Raw request body (not parsed JSON) used for digest computation
-- Idempotency on every inbound event via unique `nombaRequestId` index — no double-credits possible
-- Webhooks ACKed before processing — Nomba never retries due to our processing time
-- All credentials in environment variables only — never in source
+- Idempotency on every inbound event via unique `nombaRequestId` index: no double-credits possible
+- Webhooks ACKed before processing: Nomba never retries due to our processing time
+- All credentials in environment variables only: never in source
 - Approval queue for outgoing payments above ₦500,000
-- Bank account lookup enforced before every outbound transfer — structurally unavoidable
+- Bank account lookup enforced before every outbound transfer: structurally unavoidable
 - Catch-all account for every misdirected naira
 - Raw webhook event log enables replay and audit
 
@@ -711,14 +711,14 @@ Nomba described the structural problem precisely: *"The moment you cannot tell w
 
 ### Polished User Experience (15%)
 
-- Animated account cards with per-status colour coding — green (ACTIVE), blue (FROZEN), red (CLOSED) accent bars
+- Animated account cards with per-status colour coding: green (ACTIVE), blue (FROZEN), red (CLOSED) accent bars
 - Framer Motion transitions on modals, form panels, and table rows
-- Inline KYC upgrade flow — no separate page, no navigation, no page reload
-- Balance guard on account closure with explicit consent checkbox — can't close by accident
+- Inline KYC upgrade flow: no separate page, no navigation, no page reload
+- Balance guard on account closure with explicit consent checkbox, can't close by accident
 - Freeze notice explains the reconciliation implication in plain language
-- Real-time simulate-and-watch — dispatch a webhook, see the invoice status change without touching the page
-- Contextual kebab menus — actions disappear when they are no longer valid (closed accounts)
-- Loading skeletons throughout — no blank states while data fetches
+- Real-time simulate-and-watch: dispatch a webhook, see the invoice status change without touching the page
+- Contextual kebab menus: actions disappear when they are no longer valid (closed accounts)
+- Loading skeletons throughout: no blank states while data fetches
 - Sonner toasts for every action outcome, including backend error messages surfaced clearly
 
 ---
@@ -727,15 +727,15 @@ Nomba described the structural problem precisely: *"The moment you cannot tell w
 
 If Nexora were a production product rather than a hackathon submission, the immediate next steps would be:
 
-1. **PostgreSQL** — one line change in `prisma/schema.prisma` and `DATABASE_URL`
-2. **Webhook replay** — re-process any `WebhookEvent` that failed without contacting Nomba
-3. **Nightly reconciliation job** — automated diff of Nomba's `/v1/transactions` feed against the local ledger, keyed on `sessionId` for requery
-4. **SMS/email alerts** — notify the merchant when an exception is raised; notify the customer when their invoice is paid
-5. **Sub-account architecture** — each customer's virtual account provisioned under a Nomba sub-account so balances are isolated at the infrastructure level
-6. **Multi-merchant support** — the data model already separates everything by `merchantId`; the API layer needs tenant scoping added
-7. **Role-based access control** — separate permissions for viewing statements, approving transfers, and managing customers
-8. **Export to CSV and PDF** — statements and exception reports in formats accountants actually use
-9. **Direct debit mandates** — for merchants with subscription or recurring collection models
+1. **PostgreSQL**: one line change in `prisma/schema.prisma` and `DATABASE_URL`
+2. **Webhook replay**: re-process any `WebhookEvent` that failed without contacting Nomba
+3. **Nightly reconciliation job**: automated diff of Nomba's `/v1/transactions` feed against the local ledger, keyed on `sessionId` for requery
+4. **SMS/email alerts**: notify the merchant when an exception is raised; notify the customer when their invoice is paid
+5. **Sub-account architecture**: each customer's virtual account provisioned under a Nomba sub-account so balances are isolated at the infrastructure level
+6. **Multi-merchant support**: the data model already separates everything by `merchantId`; the API layer needs tenant scoping added
+7. **Role-based access control**: separate permissions for viewing statements, approving transfers, and managing customers
+8. **Export to CSV and PDF**: statements and exception reports in formats accountants actually use
+9. **Direct debit mandates**: for merchants with subscription or recurring collection models
 
 ---
 
@@ -745,7 +745,7 @@ We built Nexora during the Nomba × DevCareer Hackathon 2026. We thought about o
 
 They deserve better infrastructure. Nigeria deserves better infrastructure.
 
-The side hustle era is about survival. The structured business era is about growth. Nexora is the system that makes that transition possible — not for one business, but for every business that runs on Nomba.
+The side hustle era is about survival. The structured business era is about growth. Nexora is the system that makes that transition possible for every business that runs on Nomba.
 
 ---
 
